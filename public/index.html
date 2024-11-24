@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="/alpine.min.js" defer></script>
+  <script src="/htmx.min.js" defer></script>
+</head>
+<body>
+  <!-- Alpine.js and HTMX combined example -->
+  
+  <!-- Alpine.js controlled message display -->
+  <div x-data="{ message: 'Hello, Alpine.js!' }">
+    <h1 x-text="message"></h1>
+    <!-- Button to change the message dynamically using Alpine.js -->
+    <button @click="message = 'You clicked the button!'">Click me (Alpine)</button>
+  </div>
+
+  <hr>
+
+  <!-- HTMX request for server data -->
+  <div>
+    <!-- Button to fetch data from the server -->
+    <button hx-get="/api/message" hx-target="#htmx-response" hx-swap="outerHTML">
+      Fetch Message (HTMX)
+    </button>
+  </div>
+  
+  <!-- Container where HTMX will update content -->
+  <div id="htmx-response">
+    <p>Click the button above to fetch the message from the server.</p>
+  </div>
+
+</body>
+</html>
