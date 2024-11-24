@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message API</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.1/dist/htmx.min.js" defer></script>
+</head>
+<body x-data="{ message: '', messages: [] }">
+  <h1>Submit and View Messages</h1>
+
+  <!-- Input form to submit message -->
+  <div>
+    <input x-model="message" type="text" placeholder="Enter your message" class="border p-2 mb-2" />
+    <!-- Send the POST request with valid JSON -->
+    <button
+      @click="message && htmx.ajax('POST', '/api/message', {body: JSON.stringify({message}), headers: {'Content-Type': 'application/json'}}); message='';"
+      :disabled="!message"
+      class="px-4 py-2 bg-blue-500 text-white rounded"
+    >
+      Send Message
+    </button>
+  </div>
+
+  <hr>
+
+  <!-- List of stored messages -->
+  <div>
+    <button
+      @click="htmx.ajax('GET', '/api/messages', { target: '#messages' })"
+      class="px-4 py-2 bg-green-500 text-white rounded"
+    >
+      Load Messages
+    </button>
+    <ul id="messages" class="mt-4">
+      <template x-for="msg in messages" :key="msg">
+        <li x-text="msg" class="border-b py-2"></li>
+      </template>
+    </ul>
+  </div>
+
+  <script>
+    // This section allows Alpine.js to handle dynamic updates
+    document.body.addEventListener('htmx:afterRequest', function(event) {
+      if (event.detail.target.id === 'messages') {
+        // Update the Alpine.js state with the response
+        this.messages = JSON.parse(event.detail.xhr.responseText).messages;
+      }
+    });
+  </script>
+</body>
+</html>
