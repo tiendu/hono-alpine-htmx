@@ -4,17 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <script src="/alpine.min.js" defer></script>
-  <script src="/htmx.min.js" defer></script>
+  <!-- Load Alpine.js and HTMX from jsDelivr CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.1/dist/htmx.min.js" defer></script>
+  <style>
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+  </style>
 </head>
 <body>
   <!-- Alpine.js and HTMX combined example -->
   
   <!-- Alpine.js controlled message display -->
+
   <div x-data="{ message: 'Hello, Alpine.js!' }">
     <h1 x-text="message"></h1>
     <!-- Button to change the message dynamically using Alpine.js -->
-    <button @click="message = 'You clicked the button!'">Click me (Alpine)</button>
+    <button @click="message = 'You clicked the button!'" class="btn">Click me (Alpine)</button>
   </div>
 
   <hr>
@@ -27,6 +46,15 @@
     </button>
   </div>
   
+  <!-- Button with Alpine.js effect -->
+  <div x-data="{ clicked: false }">
+    <button @click="clicked = !clicked" 
+            :class="{ 'bg-blue-500': !clicked, 'bg-green-500': clicked }" 
+            class="btn">
+      <span x-text="clicked ? 'Clicked!' : 'Click me for effect'"></span>
+    </button>
+  </div>
+
   <!-- Container where HTMX will update content -->
   <div id="htmx-response">
     <p>Click the button above to fetch the message from the server.</p>
